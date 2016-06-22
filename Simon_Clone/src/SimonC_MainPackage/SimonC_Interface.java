@@ -13,7 +13,6 @@
 package SimonC_MainPackage;
 
 import java.net.URL;
-import javax.swing.JOptionPane;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -31,7 +30,6 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.media.AudioClip;
@@ -59,7 +57,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 	
     // for startPanel
     private GridPane startPanel;
-    private ComboBox sfxCB;
+    private ComboBox<String> sfxCB;
     private Slider seqLenSlider;
     private SquareButton startB;
     private Label 	directionsL, sfxThemeL, seqLenL, sliderL, 
@@ -70,21 +68,21 @@ public class SimonC_Interface extends Application implements EventHandler<Action
     private VBox setupPanel;
 
 	// for Score Panel
-	private GridPane scorePanel = new GridPane();
+	private GridPane scorePanel;
 	private Label lab, lab2, goAgain, yesLabel;
 	private SquareButton yes, no;
 	
 	// for titlePanel
-	private VBox titlePanel = new VBox();
+	private VBox titlePanel;
 	private Label titleLab;
 
 	// for boardPanel
-	private GridPane boardPanel = new GridPane();
+	private GridPane boardPanel;
 	private SquareButton [] squareButtons;
 
 	// for main panel
-	private BorderPane mainPanel = new BorderPane();
-	private Scene myScene = new Scene(mainPanel);
+	private BorderPane mainPanel;
+	private Scene myScene;
 	private Image bGround;
 	
 	private GameStart game;
@@ -108,6 +106,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		makeScorePanel();
 
 		// setup titlePanel
+		titlePanel = new VBox();
 		titleLab = new Label(" S y m o n d s :   T h e   O t h e r  M e m o r y   G a m e ");
 		titleLab.setTextAlignment(TextAlignment.CENTER);
 		titleLab.setAlignment(Pos.TOP_CENTER);
@@ -118,6 +117,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		titlePanel.getChildren().add(titleLab);
 
 		// setup mainPanel
+		mainPanel = new BorderPane();
 		mainPanel.setTop(titlePanel);
 		mainPanel.setCenter(boardPanel);
 		mainPanel.setPrefSize(400,400);
@@ -129,9 +129,11 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		mainPanel.setBackground(bg);
 		
 		// Actors go to one, please, and...ACTION!!!!
+		myScene = new Scene(mainPanel);
 		primaryStage.setTitle("The Symonds Memory Game");
-		primaryStage.setHeight(650);
-		primaryStage.setWidth(600);
+		primaryStage.setHeight(640);
+		primaryStage.setWidth(590);
+		primaryStage.setResizable(false);
 		primaryStage.setScene(myScene);
 		primaryStage.show();
 	}
@@ -446,12 +448,11 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 			
 			if(debugMode)
 				System.out.println("SFX choice: " + sfxChoice + " Seq. Len: " + sequenceLength);
-			
-			
+					
 			startPanel.getChildren().remove(setupPanel);
-			startPanel.add(scorePanel, 1, 1);prepareMedia(sfxChoice);
+			startPanel.add(scorePanel, 1, 1);
+			prepareMedia(sfxChoice);
 			startGame(sequenceLength);
-			
 		} // ssquareNum == 5 (game initialization process)
 		else if (squareNum == 6)
 		{
@@ -471,20 +472,19 @@ public class SimonC_Interface extends Application implements EventHandler<Action
        	 	no.setVisible(false);
 			Timeline tl2 = new Timeline();
    			
-   			
-   			EventHandler event3 = new EventHandler<ActionEvent>() {
+   			EventHandler<ActionEvent> event3 = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent t) {
                 	lab2.setText("GOOD BYE!!");
                 }};
 
-                EventHandler event4 = new EventHandler<ActionEvent>() {
-                    public void handle(ActionEvent t) {
-                    	System.exit(0);
-                    }};
+            EventHandler<ActionEvent> event4 = new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent t) {
+                   	System.exit(0);
+                }};
                     
-                    tl2.getKeyFrames().add(new KeyFrame(new Duration(500), event3));
-                    tl2.getKeyFrames().add(new KeyFrame(new Duration(1500), event4));
-            		tl2.play();
+            tl2.getKeyFrames().add(new KeyFrame(new Duration(500), event3));
+            tl2.getKeyFrames().add(new KeyFrame(new Duration(1500), event4));
+            tl2.play();
 		}
 		else
 		{
@@ -506,17 +506,16 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 				ellipse.setRadiusY(25.0f);}
 		startB.setShape(ellipse);
 		startB.setText("START");
-		//startB.setStyle("-fx-font-weight: bold;");
-		//startB.setTextFill(Color.RED);
 		startB.setPadding(new Insets(5));
 		startB.setStyle("-fx-base: rgb(22, 224, 22); -fx-font-weight: bold;" ); // bright green
-		sfxCB = new ComboBox(FXCollections.observableArrayList(
+		sfxCB = new ComboBox<String>(FXCollections.observableArrayList(
 			    "Original", "Agogo", "Big Ben", "Birds", "Bottle Blow",
 			    "DJ Toolbox", "Droid", "Echo Drops", "Fast Perk", "Fret Noise",
 			    "Gunshot", "Hip House", "Koto", "Ocarina", "Piano", 
 			    "Schwarzenegger", "Telephone", "The Mod Knob", "Trinidad")	);
 		sfxCB.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>(){
-			public void changed(ObservableValue ov, Number value, Number new_value) {
+			@Override
+			public void changed(ObservableValue<? extends Number> ov, Number value, Number new_value) {
 				prepareMedia(new_value.intValue());
 			}
 		});
@@ -546,7 +545,6 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		separater4.setTextAlignment(TextAlignment.CENTER);
 		seqLenSlider = new Slider();
 		Font f6 = new Font("Comic Sans MS",10);
-		Font f4 = new Font("Comic Sans MS",8);
 		separater.setFont(f6);
 		separater2.setFont(f6);
 		separater3.setFont(f6);
@@ -560,16 +558,16 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		seqLenSlider.setMajorTickUnit(2);
 		seqLenSlider.setMinorTickCount(1);
 		seqLenSlider.setBlockIncrement(1);
-		seqLenSlider.valueProperty().addListener(new ChangeListener() {
+		seqLenSlider.valueProperty().addListener(new ChangeListener<Object>() {
 
             @Override
-            public void changed(ObservableValue arg0, Object arg1, Object arg2) {
+            public void changed(ObservableValue<?> arg0, Object arg1, Object arg2) {
             	sliderL.textProperty().setValue(
                         "Sequence Length: " + String.valueOf((int) seqLenSlider.getValue()));
 
             }
         });
-		startPanel.setColumnSpan(directionsL,  3);
+		GridPane.setColumnSpan(directionsL,  3);
 		
 		sfxPanel.getChildren().addAll(sfxThemeL, sfxCB, separater);
 		setupPanel.getChildren().addAll(seqLenL, seqLenSlider, sliderL, separater2, startB, separater3, directionsL);
@@ -580,9 +578,9 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		sfxPanel.setAlignment(Pos.CENTER);
 		setupPanel.setAlignment(Pos.CENTER);
 		
-		startPanel.setHalignment(sfxPanel, HPos.CENTER);
-		startPanel.setValignment(sfxPanel,  VPos.TOP);
-		startPanel.setHalignment(setupPanel, HPos.CENTER);
+		GridPane.setHalignment(sfxPanel, HPos.CENTER);
+		GridPane.setValignment(sfxPanel,  VPos.TOP);
+		GridPane.setHalignment(setupPanel, HPos.CENTER);
 		startPanel.setGridLinesVisible(false);
 		
 		// Tooltip panel for directionsL
@@ -619,27 +617,29 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 	}
 	
 	private void makeBoardPanel(){
-		boardPanel.getColumnConstraints().add(new ColumnConstraints(150)); // column 0 is 100 wide
-		boardPanel.getColumnConstraints().add(new ColumnConstraints(225)); // column 0 is 100 wide
-		boardPanel.getColumnConstraints().add(new ColumnConstraints(150)); // column 0 is 100 wide
-		boardPanel.getRowConstraints().add(new RowConstraints(150)); // column 0 is 100 wide
-		boardPanel.getRowConstraints().add(new RowConstraints(225)); // column 0 is 100 wide
-		boardPanel.getRowConstraints().add(new RowConstraints(150)); // column 0 is 100 wide
+		boardPanel = new GridPane();
+		boardPanel.getColumnConstraints().add(new ColumnConstraints(150)); // column 0 is 150 wide
+		boardPanel.getColumnConstraints().add(new ColumnConstraints(225)); // column 1 is 225 wide
+		boardPanel.getColumnConstraints().add(new ColumnConstraints(150)); // column 2 is 150 wide
+		boardPanel.getRowConstraints().add(new RowConstraints(150)); // column 0 is 150 wide
+		boardPanel.getRowConstraints().add(new RowConstraints(225)); // column 1 is 225 wide
+		boardPanel.getRowConstraints().add(new RowConstraints(150)); // column 2 is 150 wide
 		boardPanel.setAlignment(Pos.CENTER);
 		boardPanel.add(squareButtons[0], 1,  0);
 		boardPanel.add(squareButtons[1], 0,  1);
 		boardPanel.add(squareButtons[2], 2,  1);
 		boardPanel.add(squareButtons[3], 1,  2);
 		boardPanel.add(startPanel, 1, 1);
-		boardPanel.setHalignment(squareButtons[0],  HPos.CENTER);
-		boardPanel.setHalignment(squareButtons[1],  HPos.CENTER);
-		boardPanel.setHalignment(squareButtons[2],  HPos.CENTER);
-		boardPanel.setHalignment(squareButtons[3],  HPos.CENTER);
-		boardPanel.setHalignment(startPanel,  HPos.CENTER);
+		GridPane.setHalignment(squareButtons[0],  HPos.CENTER);
+		GridPane.setHalignment(squareButtons[1],  HPos.CENTER);
+		GridPane.setHalignment(squareButtons[2],  HPos.CENTER);
+		GridPane.setHalignment(squareButtons[3],  HPos.CENTER);
+		GridPane.setHalignment(startPanel,  HPos.CENTER);
 		//boardPanel.setGridLinesVisible(true);
 	}
 	
 	private void makeScorePanel(){
+		scorePanel = new GridPane();
 		scorePanel.setAlignment(Pos.CENTER);
 		lab = new Label("");
 		lab2 = new Label("");
@@ -684,10 +684,10 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		no.setDisable(true);
 		yes.setOnAction(SimonC_Interface.this);
 		no.setOnAction(SimonC_Interface.this);
-		scorePanel.setHalignment(lab, HPos.CENTER);
-		scorePanel.setHalignment(lab2, HPos.CENTER);
-		scorePanel.setHalignment(yes,  HPos.RIGHT);
-		scorePanel.setHalignment(no,  HPos.LEFT);
+		GridPane.setHalignment(lab, HPos.CENTER);
+		GridPane.setHalignment(lab2, HPos.CENTER);
+		GridPane.setHalignment(yes,  HPos.RIGHT);
+		GridPane.setHalignment(no,  HPos.LEFT);
 		//scorePanel.setGridLinesVisible(true);
 	}
 	
@@ -702,7 +702,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
         	}
 		};
 		Timeline timeline2 = new Timeline();
-		EventHandler event = new EventHandler<ActionEvent>() {
+		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	new Thread(task).start();
             }};
@@ -720,25 +720,25 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 	        Duration duration3 = Duration.millis(2750);
 	        Duration duration4 = Duration.millis(3500);
 	        //one can add a specific action when the keyframe is reached
-	        EventHandler onFinished1 = new EventHandler<ActionEvent>() {
+	        EventHandler<ActionEvent> onFinished1 = new EventHandler<ActionEvent>() {
 	            public void handle(ActionEvent t) {
 	            	lab2.setText("Ready...");
 	            }
 	        };
 	        
-	        EventHandler onFinished2 = new EventHandler<ActionEvent>() {
+	        EventHandler<ActionEvent> onFinished2 = new EventHandler<ActionEvent>() {
 	            public void handle(ActionEvent t) {
 	                 lab2.setText("Set...");
 	            }
 	        };
 	        
-	        EventHandler onFinished3 = new EventHandler<ActionEvent>() {
+	        EventHandler<ActionEvent> onFinished3 = new EventHandler<ActionEvent>() {
 	            public void handle(ActionEvent t) {
 	                 lab2.setText("GO!!!");
 	            }
 	        };
 	        
-	        EventHandler onFinished4 = new EventHandler<ActionEvent>() {
+	        EventHandler<ActionEvent> onFinished4 = new EventHandler<ActionEvent>() {
 	            public void handle(ActionEvent t) {
 	            	try{startSequenceThread(game);}
 	            	catch(Exception e){
@@ -776,7 +776,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		Timeline timeline1 = new Timeline();
 		int sequenceCount = game.getSequenceCounter();
 		Duration durs;
-		EventHandler event;
+		EventHandler<ActionEvent> event;
 		int standUnit = 750;
 		ctr = 0;
 		
@@ -818,7 +818,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 	        Duration duration2 = Duration.millis(500);
 	        Duration duration3 = Duration.millis(1000);
 	        
-	        EventHandler onFinished1 = new EventHandler<ActionEvent>() {
+	        EventHandler<ActionEvent> onFinished1 = new EventHandler<ActionEvent>() {
 	            public void handle(ActionEvent t) {
 	            	switch (sqNum){
 	    			case 0: 
@@ -858,7 +858,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 	            }
 	        };
 	        
-	        EventHandler onFinished2 = new EventHandler<ActionEvent>() {
+	        EventHandler<ActionEvent> onFinished2 = new EventHandler<ActionEvent>() {
 	            public void handle(ActionEvent t) {
 	            	switch (sqNum){
 	    			case 0: 
@@ -894,7 +894,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 	            }
 	        };
 
-	        EventHandler onFinished3 = new EventHandler<ActionEvent>() {
+	        EventHandler<ActionEvent> onFinished3 = new EventHandler<ActionEvent>() {
 	            public void handle(ActionEvent t) {
 	            	if(debugMode)
 	            		System.out.println("timeline about to stop");
@@ -946,7 +946,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		Duration d1 = new Duration(500);
 		Duration d2 = new Duration(2000);
 		
-		EventHandler event = new EventHandler<ActionEvent>() {
+		EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
             public void handle(ActionEvent t) {
             	if(win)
         		{
@@ -960,7 +960,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
         		}
             }};
             
-        EventHandler event2 = new EventHandler<ActionEvent>() {
+        EventHandler<ActionEvent> event2 = new EventHandler<ActionEvent>() {
              public void handle(ActionEvent t) {
             	 lab2.setText("");
             	 yes.setDisable(false);
