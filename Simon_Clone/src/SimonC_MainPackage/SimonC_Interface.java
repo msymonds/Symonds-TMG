@@ -12,7 +12,11 @@
 
 package SimonC_MainPackage;
 
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -48,6 +52,7 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 	private final boolean debugMode = false; 
 	
 	// for audio media/sfx
+	private List<String> audioPaks = new ArrayList<String>();
 	private URL resource1, resource2, resource3, resource4, resource5, resource6;
 	private AudioClip boop1, boop2, boop3, boop4, youWin, youFail;
 	
@@ -92,6 +97,10 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		
+		// Load audio source file locations
+		FileMonster.initializeAudio("audio.txt", audioPaks);
 		
 		// 4 Big Buttons with action/mouse event handlers
 		makeButtons();
@@ -138,210 +147,19 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		primaryStage.show();
 	}
 	
+	private void loadAudioResources(int choice){
+		String f = audioPaks.get(choice);
+		
+		resource1 = getClass().getResource((f + "/boop1.wav").trim());
+		resource2 = getClass().getResource((f + "/boop2.wav").trim());
+		resource3 = getClass().getResource((f + "/boop3.wav").trim());
+		resource4 = getClass().getResource((f + "/boop4.wav").trim());
+		resource5 = getClass().getResource((f + "/youWin.wav").trim());
+		resource6 = getClass().getResource((f + "/youFail.wav").trim());
+	}
+	
 	private void prepareMedia(int choice){
-		
-		switch(choice){
-		case 0:
-		{
-			resource1 = getClass().getResource("/resources/Audio/OG_Theme/boop1.mp3");
-			resource2 = getClass().getResource("/resources/Audio/OG_Theme/boop2.mp3");
-			resource3 = getClass().getResource("/resources/Audio/OG_Theme/boop3.mp3");
-			resource4 = getClass().getResource("/resources/Audio/OG_Theme/boop4.mp3");
-			resource5 = getClass().getResource("/resources/Audio/OG_Theme/youWin.mp3");
-			resource6 = getClass().getResource("/resources/Audio/OG_Theme/youFail.mp3");
-			break;
-		}
-		case 1:
-		{
-			resource1 = getClass().getResource("/resources/Audio/Agogo_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/Agogo_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/Agogo_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/Agogo_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/Agogo_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/Agogo_Theme/youFail.wav");
-			break;
-		}
-		case 2:
-		{
-			resource1 = getClass().getResource("/resources/Audio/BigBen_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/BigBen_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/BigBen_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/BigBen_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/BigBen_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/BigBen_Theme/youFail.wav");
-			break;
-		}
-		case 3:
-		{
-			resource1 = getClass().getResource("/resources/Audio/Birds_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/Birds_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/Birds_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/Birds_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/Birds_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/Birds_Theme/youFail.wav");
-			break;
-		}
-		case 4:
-		{
-			resource1 = getClass().getResource("/resources/Audio/BottleBlow_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/BottleBlow_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/BottleBlow_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/BottleBlow_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/BottleBlow_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/BottleBlow_Theme/youFail.wav");
-			break;
-		}
-		case 5:
-		{
-			resource1 = getClass().getResource("/resources/Audio/DJToolbox_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/DJToolbox_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/DJToolbox_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/DJToolbox_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/DJToolbox_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/DJToolbox_Theme/youFail.wav");
-			break;
-		}
-		case 6:
-		{
-			resource1 = getClass().getResource("/resources/Audio/Droid_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/Droid_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/Droid_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/Droid_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/Droid_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/Droid_Theme/youFail.wav");
-			break;
-		}
-		case 7:
-		{
-			resource1 = getClass().getResource("/resources/Audio/EchoDrops_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/EchoDrops_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/EchoDrops_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/EchoDrops_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/EchoDrops_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/EchoDrops_Theme/youFail.wav");
-			break;
-		}
-		case 8:
-		{
-			resource1 = getClass().getResource("/resources/Audio/FastPerk_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/FastPerk_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/FastPerk_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/FastPerk_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/FastPerk_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/FastPerk_Theme/youFail.wav");
-			break;
-		}
-		case 9:
-		{
-			resource1 = getClass().getResource("/resources/Audio/FretNoise_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/FretNoise_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/FretNoise_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/FretNoise_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/FretNoise_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/FretNoise_Theme/youFail.wav");
-			break;
-		}
-		case 10:
-		{
-			resource1 = getClass().getResource("/resources/Audio/Gunshot_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/Gunshot_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/Gunshot_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/Gunshot_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/Gunshot_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/Gunshot_Theme/youFail.wav");
-			break;
-		}
-		case 11:
-		{
-			resource1 = getClass().getResource("/resources/Audio/HipHouse_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/HipHouse_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/HipHouse_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/HipHouse_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/HipHouse_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/HipHouse_Theme/youFail.wav");
-			break;
-		}
-		case 12:
-		{
-			resource1 = getClass().getResource("/resources/Audio/Koto_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/Koto_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/Koto_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/Koto_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/Koto_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/Koto_Theme/youFail.wav");
-			break;
-		}
-		case 13:
-		{
-			resource1 = getClass().getResource("/resources/Audio/Ocarina_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/Ocarina_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/Ocarina_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/Ocarina_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/Ocarina_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/Ocarina_Theme/youFail.wav");
-			break;
-		}
-		case 14:
-		{
-			resource1 = getClass().getResource("/resources/Audio/Piano_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/Piano_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/Piano_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/Piano_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/Piano_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/Piano_Theme/youFail.wav");
-			break;
-		}
-		case 15:
-		{
-			resource1 = getClass().getResource("/resources/Audio/Schwarzenegger_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/Schwarzenegger_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/Schwarzenegger_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/Schwarzenegger_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/Schwarzenegger_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/Schwarzenegger_Theme/youFail.wav");
-			break;
-		}
-		case 16:
-		{
-			resource1 = getClass().getResource("/resources/Audio/Telephone_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/Telephone_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/Telephone_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/Telephone_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/Telephone_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/Telephone_Theme/youFail.wav");
-			break;
-		}
-		case 17:
-		{
-			resource1 = getClass().getResource("/resources/Audio/TheModKnob_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/TheModKnob_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/TheModKnob_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/TheModKnob_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/TheModKnob_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/TheModKnob_Theme/youFail.wav");
-			break;
-		}
-		case 18:
-		{
-			resource1 = getClass().getResource("/resources/Audio/Trinidad_Theme/boop1.wav");
-			resource2 = getClass().getResource("/resources/Audio/Trinidad_Theme/boop2.wav");
-			resource3 = getClass().getResource("/resources/Audio/Trinidad_Theme/boop3.wav");
-			resource4 = getClass().getResource("/resources/Audio/Trinidad_Theme/boop4.wav");
-			resource5 = getClass().getResource("/resources/Audio/Trinidad_Theme/youWin.wav");
-			resource6 = getClass().getResource("/resources/Audio/Trinidad_Theme/youFail.wav");
-			break;
-		}
-		default:
-		{
-			resource1 = getClass().getResource("/resources/Audio/OG_Theme/boop1.mp3");
-			resource2 = getClass().getResource("/resources/Audio/OG_Theme/boop2.mp3");
-			resource3 = getClass().getResource("/resources/Audio/OG_Theme/boop3.mp3");
-			resource4 = getClass().getResource("/resources/Audio/OG_Theme/boop4.mp3");
-			resource5 = getClass().getResource("/resources/Audio/OG_Theme/youWin.mp3");
-			resource6 = getClass().getResource("/resources/Audio/OG_Theme/youFail.mp3");
-		}
-		} // switch (choice)
-		
+		loadAudioResources(choice);
 		boop1 = new AudioClip(resource1.toString());
 		boop2 = new AudioClip(resource2.toString());
 		boop3 = new AudioClip(resource3.toString());
@@ -814,9 +632,9 @@ public class SimonC_Interface extends Application implements EventHandler<Action
 		timeline = new Timeline();
 		 
 		 //create a keyFrame, the keyValue is reached at time speced in ms
-	        Duration duration1 = Duration.millis(1);
-	        Duration duration2 = Duration.millis(500);
-	        Duration duration3 = Duration.millis(1000);
+	        Duration duration1 = Duration.millis(100);
+	        Duration duration2 = Duration.millis(550);
+	        Duration duration3 = Duration.millis(740);
 	        
 	        EventHandler<ActionEvent> onFinished1 = new EventHandler<ActionEvent>() {
 	            public void handle(ActionEvent t) {
